@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Médicos - Clínica</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-hospital-alt"></i> Sistema de Citas Médicas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                    <a class="nav-link" href="{% url 'listar_pacientes' %}">
+                        <i class="fas fa-users"></i> Pacientes
+                    </a>
+                    <a class="nav-link active" href="{% url 'listar_medicos' %}">
+                        <i class="fas fa-user-md"></i> Médicos
+                    </a>
+                    <a class="nav-link " href="{% url 'listar_citas' %}">
+                        <i class="fas fa-calendar"></i> Citas
+                    </a>
+                    <a class="nav-link" href="{% url 'citas_del_dia' %}">
+                        <i class="fas fa-calendar-day"></i> Hoy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-user-md"></i> Lista de Médicos</h2>
+            <a href="{% url 'agregar_medico' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Agregar Médico
+            </a>
+        </div>
+
+        {% if medicos %}
+            <div class="row">
+                {% for medico in medicos %}
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-user-md text-primary"></i>
+                                Dr. {{ medico.nombre }} {{ medico.apellido }}
+                            </h5>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-stethoscope"></i> {{ medico.id_especialidad.nombre_especialidad }}
+                                    <br>
+                                    <i class="fas fa-id-card"></i> Cédula: {{ medico.cedula_profesional }}
+                                </small>
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'detalle_medico' medico.id_medico %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+               {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning">No hay médicos registrados.</div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

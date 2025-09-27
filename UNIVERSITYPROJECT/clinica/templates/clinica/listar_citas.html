@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Citas - Clínica</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-hospital-alt"></i> Sistema de Citas Médicas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                    <a class="nav-link" href="{% url 'listar_pacientes' %}">
+                        <i class="fas fa-users"></i> Pacientes
+                    </a>
+                    <a class="nav-link" href="{% url 'listar_medicos' %}">
+                        <i class="fas fa-user-md"></i> Médicos
+                    </a>
+                    <a class="nav-link active" href="{% url 'listar_citas' %}">
+                        <i class="fas fa-calendar"></i> Citas
+                    </a>
+                    <a class="nav-link" href="{% url 'citas_del_dia' %}">
+                        <i class="fas fa-calendar-day"></i> Hoy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-calendar-alt"></i> Lista de Citas</h2>
+                    <a href="{% url 'agregar_cita' %}" class="btn btn-success">
+                        <i class="fas fa-calendar-plus"></i> Agendar Nueva Cita
+                    </a>
+                </div>
+
+                <!-- Mensajes -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Estadísticas rápidas -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>{{ citas.count }}</h4>
+                                        <small>Total Citas</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-calendar fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>0</h4>
+                                        <small>Confirmadas</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>0</h4>
+                                        <small>Pendientes</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>0</h4>
+                                        <small>Hoy</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-calendar-day fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Citas -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Citas Programadas</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if citas %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Fecha y Hora</th>
+                                            <th>Paciente</th>
+                                            <th>Médico</th>
+                                            <th>Especialidad</th>
+                                            <th>Consultorio</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for cita in citas %}
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-primary">#{{ cita.id_cita }}</span>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <strong>{{ cita.fecha_cita|date:"d/m/Y" }}</strong>
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-clock"></i> {{ cita.hora_cita }}
+                                                    </small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'detalle_paciente' cita.id_paciente.id_paciente %}" 
+                                                   class="text-decoration-none">
+                                                    <i class="fas fa-user"></i>
+                                                    <strong>{{ cita.id_paciente.nombre }} {{ cita.id_paciente.apellido }}</strong>
+                                                </a>
+                                                <br>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-envelope"></i> {{ cita.id_paciente.correo }}
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'detalle_medico' cita.id_medico.id_medico %}" 
+                                                   class="text-decoration-none">
+                                                    <i class="fas fa-user-md"></i>
+                                                    <strong>Dr. {{ cita.id_medico.nombre }} {{ cita.id_medico.apellido }}</strong>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">
+                                                    {{ cita.id_medico.id_especialidad.nombre_especialidad }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <i class="fas fa-door-open"></i>
+                                                {{ cita.id_consultorio.numero_consultorio }}
+                                            </td>
+                                            <td>
+                                                <span class="badge {% if cita.estado == 'PROGRAMADA' %}bg-primary{% elif cita.estado == 'CONFIRMADA' %}bg-success{% elif cita.estado == 'COMPLETADA' %}bg-secondary{% elif cita.estado == 'CANCELADA' %}bg-danger{% else %}bg-warning{% endif %}">
+                                                    {{ cita.estado }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    {% if cita.estado == 'PROGRAMADA' or cita.estado == 'CONFIRMADA' %}
+                                                        <button class="btn btn-outline-danger btn-sm" 
+                                                                onclick="cancelarCita({{ cita.id_cita }})" 
+                                                                title="Cancelar Cita">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                    <button class="btn btn-outline-primary btn-sm" 
+                                                            onclick="verDetalle({{ cita.id_cita }})" 
+                                                            title="Ver Detalles">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                                <h4 class="text-muted">No hay citas programadas</h4>
+                                <p class="text-muted">Comienza agendando la primera cita</p>
+                                <a href="{% url 'agregar_cita' %}" class="btn btn-success">
+                                    <i class="fas fa-calendar-plus"></i> Agendar Primera Cita
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Enlaces rápidos -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h6>Acciones Rápidas</h6>
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'citas_del_dia' %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-calendar-day"></i> Ver Citas de Hoy
+                                    </a>
+                                    <a href="{% url 'agregar_paciente' %}" class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-user-plus"></i> Agregar Paciente
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6><i class="fas fa-info-circle"></i> Información</h6>
+                                <small class="text-muted">
+                                    • Haz clic en el nombre del paciente o médico para ver sus detalles<br>
+                                    • Las citas se ordenan por fecha más reciente<br>
+                                    • Puedes cancelar citas que estén programadas o confirmadas
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function cancelarCita(citaId) {
+            if (confirm('¿Está seguro de cancelar esta cita?')) {
+                // Aquí enviarías la solicitud para cancelar
+                window.location.href = `/citas/${citaId}/cancelar/`;
+            }
+        }
+        
+        function verDetalle(citaId) {
+            alert('Funcionalidad de ver detalle - Cita #' + citaId);
+            // Aquí podrías abrir un modal o redirigir a una página de detalle
+        }
+    </script>
+</body>
+</html>
