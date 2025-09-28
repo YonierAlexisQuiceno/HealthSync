@@ -54,15 +54,33 @@ def agregar_paciente(request):
     return render(request, 'clinica/agregar_paciente.html', {'form': form})
 
 def listar_citas(request):
-    """Lista todas las citas"""
-    citas = Citas.objects.select_related(
-        'id_paciente', 
-        'id_medico', 
-        'id_medico__id_especialidad', 
+    """Lista todas las citas con contadores"""
+    from django.utils import timezone
+    hoy = timezone.localdate()
+
+    qs = Citas.objects.select_related(
+        'id_paciente',
+        'id_medico',
+        'id_medico__id_especialidad',
         'id_consultorio'
-    ).all().order_by('-fecha_cita', '-hora_cita')
-    
-    return render(request, 'clinica/listar_citas.html', {'citas': citas})
+    )
+
+    total_citas = qs.exclude(estado='CANCELADA').count()
+    confirmadas = qs.filter(estado='CONFIRMADA').count()
+    pendientes = qs.filter(estado__in=['PROGRAMADA', 'REPROGRAMADA']).count()
+    hoy_count  = qs.filter(fecha_cita=hoy).exclude(estado='CANCELADA').count()
+
+    citas = qs.order_by('-fecha_cita', '-hora_cita')
+
+    context = {
+        'citas': citas,
+        'total_citas': total_citas,
+        'confirmadas': confirmadas,
+        'pendientes': pendientes,
+        'hoy_count': hoy_count,
+    }
+    return render(request, 'clinica/listar_citas.html', context)
+
 
 def agregar_cita(request):
     """Agregar nueva cita"""

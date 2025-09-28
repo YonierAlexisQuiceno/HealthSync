@@ -67,7 +67,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h4>{{ citas.count }}</h4>
+                                        <h4>{{ total_citas }}</h4>
                                         <small>Total Citas</small>
                                     </div>
                                     <div class="align-self-center">
@@ -82,7 +82,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h4>0</h4>
+                                        <h4>{{ confirmadas }}</h4>
                                         <small>Confirmadas</small>
                                     </div>
                                     <div class="align-self-center">
@@ -97,7 +97,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h4>0</h4>
+                                        <h4>{{ pendientes }}</h4>
                                         <small>Pendientes</small>
                                     </div>
                                     <div class="align-self-center">
@@ -112,7 +112,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h4>0</h4>
+                                        <h4>{{ hoy_count }}</h4>
                                         <small>Hoy</small>
                                     </div>
                                     <div class="align-self-center">
@@ -195,11 +195,7 @@
                                             <td>
                                                 <div class="btn-group btn-group-sm" role="group">
                                                     {% if cita.estado == 'PROGRAMADA' or cita.estado == 'CONFIRMADA' %}
-                                                        <button class="btn btn-outline-danger btn-sm" 
-                                                                onclick="cancelarCita({{ cita.id_cita }})" 
-                                                                title="Cancelar Cita">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
+                                                        <form action="{% url 'cancelar_cita' cita.id_cita %}" method="post" class="d-inline" onsubmit="return confirm('¿Está seguro de cancelar esta cita?');">{% csrf_token %}<button type="submit" class="btn btn-outline-danger btn-sm" title="Cancelar Cita"><i class="fas fa-times"></i></button></form>
                                                     {% endif %}
                                                     <button class="btn btn-outline-primary btn-sm" 
                                                             onclick="verDetalle({{ cita.id_cita }})" 
@@ -264,12 +260,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        function cancelarCita(citaId) {
-            if (confirm('¿Está seguro de cancelar esta cita?')) {
-                // Aquí enviarías la solicitud para cancelar
-                window.location.href = `/citas/${citaId}/cancelar/`;
-            }
-        }
+        
         
         function verDetalle(citaId) {
             alert('Funcionalidad de ver detalle - Cita #' + citaId);
