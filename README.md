@@ -1,9 +1,9 @@
-🏥 HealthSync — Gestión de Citas Médicas
+# HealthSync — Gestión de Citas Médicas
 
 Clínica Señora del Perpetuo Socorro
 Proyecto académico — Institución Universitaria Digital de Antioquia (Semestre 3, 2025)
 
-📖 Descripción
+## Descripción
 
 HealthSync es un sistema de gestión de citas médicas que optimiza el agendamiento, modificación y cancelación de citas en la Clínica Señora del Perpetuo Socorro.
 
@@ -17,13 +17,11 @@ Busca reemplazar procesos manuales (cuadernos, llamadas) con una plataforma digi
 
 📌 Administración de pacientes y médicos con base de datos relacional.
 
-📌 Recordatorios automáticos (48h y 24h antes de la cita).
-
 📌 Panel administrativo simple (≤ 3 pasos por acción).
 
 📌 Seguridad e integridad de datos mediante validaciones.
 
-🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 Backend: Python 3.9+, Django 4.2
 
@@ -33,9 +31,11 @@ ORM: Django ORM
 
 Frontend: HTML/CSS/JS + templates de Django
 
-📂 Estructura del proyecto
+## Estructura del proyecto
+
+```text
 HealthSync/
-├─ venv/                          # entorno virtual (no se versiona)
+├─ venv/             # entorno virtual (no se versiona)
 └─ UNIVERSITYPROJECT/
    ├─ manage.py
    ├─ UNIVERSITYPROJECT/
@@ -50,48 +50,26 @@ HealthSync/
       ├─ views.py
       ├─ urls.py
       └─ admin.py
-
-⚙️ Instalación y configuración
+```
+### Instalación y configuración
 1. Clonar repositorio
+```bash 
 git clone https://github.com/YonierAlexisQuiceno/HealthSync.git
 cd HealthSync/UNIVERSITYPROJECT
+```
 
-
-El entorno virtual venv se ubica un nivel arriba de la carpeta con manage.py.
-
-2. Crear y activar entorno virtual
-Windows (PowerShell)
-python -m venv ..\venv
-..\venv\Scripts\activate
-
-
-Si PowerShell bloquea scripts:
-..\venv\Scripts\activate.bat o
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass.
-
-macOS / Linux
-python3 -m venv ../venv
-source ../venv/bin/activate
-
-3. Instalar dependencias
-
-Si el repo trae requirements.txt:
-
-pip install -r requirements.txt
-
-
-Mínimo necesario:
-
-pip install "Django==4.2.*" "psycopg[binary]" tzdata
-# Alternativa: pip install psycopg2-binary
-
-4. Configurar PostgreSQL
+2. Configurar PostgreSQL
 CREATE DATABASE citas_medicas;
 ALTER USER postgres WITH PASSWORD 'tu_password_seguro';
 
 
 En UNIVERSITYPROJECT/settings.py:
 
+organiza este arcvhivo segun sus credenciales de posgres
+
+organiza este archivo segun sus credenciales de postgres
+
+```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -104,20 +82,53 @@ DATABASES = {
 }
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 TIME_ZONE = 'America/Bogota'
+```
+### Creación y Activación del Entorno Virtual (.venv)
 
-5. Migraciones, superusuario y servidor
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1     
+pip install --upgrade pip
+```
+### Instalación de Django y Django REST Framework
+
+```bash
+pip install django
+pip install djangorestframework
+```
+### Navegar al Directorio Principal del Proyecto (UNIVERSITYPROJECT)
+
+```bash
+cd .\UNIVERSITYPROJECT\
+```
+### Instalar el Controlador de Base de Datos para PostgreSQL
+
+```bash
+python.exe -m pip install psycopg2-binary
+```
+### Aplicar Migraciones a la Base de Datos
+
+```bash
 python manage.py makemigrations
 python manage.py migrate
+```
+### Crear el Superusuario Administrador
+
+```bash
 python manage.py createsuperuser
-python manage.py runserver
+```
+### Iniciar el Servidor de Desarrollo
+ 
+```bash
+python manage.py runserver 
+```
 
 
 App: http://127.0.0.1:8000
 
 Admin: http://127.0.0.1:8000/admin
 
-🚀 Uso
-Roles
+## Uso Roles
 
 Administrador: gestiona citas, pacientes, médicos, consultorios y especialidades.
 
@@ -125,21 +136,9 @@ Paciente: recibe notificaciones y confirma/cancela citas.
 
 Rutas de ejemplo
 
-/ — Home
 
-/pacientes/
 
-/medicos/
-
-/citas/
-
-/citas/agregar/
-
-/citas/hoy/
-
-/admin/
-
-📊 Modelo de datos
+## Modelo de datos
 
 Tablas principales:
 
@@ -153,22 +152,9 @@ Consultorios
 
 Citas
 
-🛠️ Problemas comunes y soluciones
 
-Error loading psycopg2 or psycopg module → pip install "psycopg[binary]".
 
-getaddrinfo failed → cambia HOST a 127.0.0.1.
-
-password authentication failed → revisa credenciales en PostgreSQL y settings.py.
-
-psql: command not found en Windows → agrega PostgreSQL a PATH o usa pgAdmin.
-
-PowerShell no activa venv → usar .bat o Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass.
-
-Python apunta al sistema en Windows → desactivar App execution aliases o alias temporal:
-Set-Alias python "..\venv\Scripts\python.exe".
-
-👨‍💻 Autores
+## Autores
 
 Yonier Alexis Quiceno Rodríguez
 
@@ -179,6 +165,6 @@ Eulices Morales
 Institución Universitaria Digital de Antioquia
 Semestre 3 — 2025
 
-📜 Licencia
+## Licencia
 
 Este proyecto se distribuye bajo licencia MIT. Puedes usarlo, modificarlo y distribuirlo libremente, dando crédito a los autores.
