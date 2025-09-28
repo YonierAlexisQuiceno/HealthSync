@@ -1,0 +1,13 @@
+# Ignorar el archivo settings.py
+UNIVERSITYPROJECT/UNIVERSITYPROJECT/settings.py
+
+# Ignorar migraciones
+migrations/
+
+# Ignorar entornos virtuales
+.venv/
+venv/
+
+# Ignorar cachés de Python
+__pycache__/
+models/__pycache__/

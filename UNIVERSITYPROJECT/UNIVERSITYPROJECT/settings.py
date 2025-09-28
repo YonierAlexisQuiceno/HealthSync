@@ -79,9 +79,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'citas_medicas',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'root',   # la que acabes de configurar
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '5432',       # o el puerto que viste en postgresql.conf
     }
 }
 
